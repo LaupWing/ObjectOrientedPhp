@@ -16,6 +16,7 @@
             }
             $this->validateUsername();
             $this->validateEmail();
+            return $this->errors;
         }
         private function validateUsername(){
             $val = trim($this->data['username']);
@@ -30,11 +31,19 @@
             }
         }
         private function validateEmail(){
-            
+            $val = trim($this->data['email']);
         }
 
         private function addError($key, $val){
             $this->errors[$key] = $val;
+            if(empty($val)){
+                $this->addError('email', 'email cannot be empty');
+            } 
+            else{
+                if(!filter_var($val, FILTER_VALIDATE_EMAIL)){
+                    $this->addError('email', 'This must be an email');
+                }  
+            }
         }
     }
 ?>
